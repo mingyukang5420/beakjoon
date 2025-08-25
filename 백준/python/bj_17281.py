@@ -50,7 +50,9 @@ def baseball_game(hitting_order, player_performance) -> int:
     Returns:
         int: 타순대로 타석에 섰을때 점수 반환
     """
+    # 현재 타석에 올라갈 타자 번호 1번 타자 ~ 9번 타자  -> 0~8
     curr_hitter = 0
+
     out_count = 0
     score = 0
     curr_inning = 1
@@ -64,11 +66,12 @@ def baseball_game(hitting_order, player_performance) -> int:
             return score
 
         # print(f"[DEBUG] curr_inning: {curr_inning}")
-        # print(f"[DEBUG] hitting_order[curr_inning-1]: {hitting_order[curr_inning-1]}")
+        print(f"[DEBUG] curr_hitter: {curr_hitter}")
+        print(f"[DEBUG] hitting_order: {hitting_order}")
         # print(f"[DEBUG] player_performance: {player_performance}")
         # print(f"[DEBUG] player_performance[curr_inning-1]: {player_performance[curr_inning-1]}")
 
-        hitter = hitting_order[curr_inning - 1].index(curr_hitter + 1)  # 타순에서 어느 선수가 칠지 찾기
+        hitter = hitting_order.index(curr_hitter + 1)  # 타순에서 어느 선수가 칠지 찾기
         hit_result = player_performance[curr_inning - 1][hitter]  # 타석 결과
 
         if hit_result == 0:  # 아웃이면
@@ -93,8 +96,12 @@ def baseball_game(hitting_order, player_performance) -> int:
 
         curr_hitter = (curr_hitter + 1) % 9
 
+        # print(f"[DEBUG]: hit_result: {hit_result}")
+        # print(f"[DEBUG]: out_count: {out_count}")
+
         if out_count == 3:  # 아웃이 3개면
             curr_inning += 1  # 다음 이닝
+            out_count = 0  # 아웃카운트 초기화
 
 
 def open_input_as_stdin():
@@ -111,10 +118,14 @@ def main():
         N = int(input())
         given_input = [list(map(int, input().split())) for _ in range(N)]
         hit_order = get_hit_order()
+
+        # print(f"[DEBUG] hit_order: {hit_order}")
+
         score_case = []
         for n, order in enumerate(hit_order):
-            print(f"[DEBUG] {n}th_game")
-            score_case.append(baseball_game(hit_order, given_input))
+            # print(f"[DEBUG] {n}th_game")
+            score_case.append(baseball_game(order, given_input))
+        # score_case.append(baseball_game([4,1,2,3,5,6,7,8,9], given_input))
         result = max(score_case)
 
         print(f"#{tc} {result}")
